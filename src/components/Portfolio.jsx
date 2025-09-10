@@ -540,7 +540,7 @@ const Portfolio = () => {
       </div>
     </div>
     
-    <div className="lg:w-80">
+    <div className="lg:w-80 pt-10">
       {project.media ? (
         <Dialog>
           <DialogTrigger asChild>
