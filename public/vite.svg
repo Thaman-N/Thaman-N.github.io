@@ -1,0 +1,19 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 
+    Vite Gem Icon
+    A modern, abstract icon representing speed, bundling, and innovation.
+    Created by Gemini.
+  -->
+  <defs>
+    <linearGradient id="gemGradient" x1="40" y1="216" x2="200" y2="50">
+      <stop stop-color="#8B5CF6"/> <!-- Vibrant Violet -->
+      <stop offset="1" stop-color="#22D3EE"/> <!-- Bright Cyan -->
+    </linearGradient>
+  </defs>
+  
+  <!-- Shadow/Background Element for depth -->
+  <path d="M48.7842 216L128 40L207.216 216H157.607L128 140.787L98.3934 216H48.7842Z" fill="#1E1B4B" opacity="0.5"/>
+  
+  <!-- Main Icon Shape with Gradient -->
+  <path d="M40 216L128 40L216 216H163.5L128 131L92.5 216H40Z" fill="url(#gemGradient)"/>
+</svg>
