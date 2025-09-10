@@ -5,9 +5,18 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/', // For username.github.io repos
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    outDir: 'docs',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
     },
   },
 })
