@@ -250,6 +250,65 @@ const Portfolio = () => {
           max-width: 90rem;
           width: 100%;
         }
+
+        /* Mobile Responsive Styles - Only for proper scaling */
+        @media (max-width: 768px) {
+          .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
+          
+          .mt-10.flex.items-center.justify-center.gap-x-6.flex-wrap {
+            flex-direction: column;
+            gap: 0.75rem;
+          }
+          
+          .mt-10.flex.items-center.justify-center.gap-x-6.flex-wrap > * {
+            width: 100%;
+            justify-content: center;
+          }
+          
+          .flex.flex-col.lg\\:flex-row.lg\\:items-start.lg\\:justify-between.gap-4 {
+            flex-direction: column;
+          }
+          
+          .lg\\:w-80 {
+            width: 100%;
+            order: -1;
+          }
+          
+          .flex.flex-wrap.gap-2.items-center.justify-between {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+          }
+          
+          .flex.gap-2.ml-auto {
+            margin-left: 0;
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+          
+          .flex.gap-2.ml-auto > * {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .text-4xl.font-bold.tracking-tight.sm\\:text-6xl.md\\:text-7xl {
+            font-size: 2rem;
+          }
+          
+          .text-3xl.font-bold.tracking-tight.sm\\:text-4xl {
+            font-size: 2rem;
+          }
+          
+          .container {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+          }
+        }
       `}</style>
       
       {/* Particles Background for entire page with reactive colors */}
