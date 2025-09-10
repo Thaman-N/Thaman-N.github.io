@@ -38,27 +38,6 @@ import MagicBento from './MagicBento';
 import Particles from './Particles';
 import useTheme from './useTheme';
 
-// Scroll animation hook
-const useScrollAnimation = () => {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-    );
-
-    const elements = document.querySelectorAll('.scroll-animate');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-};
-
 const FancyVideoSkeleton = () => (
   <div className="aspect-video rounded-lg bg-muted overflow-hidden relative">
     <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/10">
@@ -83,8 +62,6 @@ const Portfolio = () => {
   const { darkMode, toggleDarkMode, currentTheme, setTheme, availableThemes, getThemeName, colors } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  useScrollAnimation();
-
   const navigation = [
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
@@ -196,22 +173,6 @@ const Portfolio = () => {
   return (
     <>
       <style>{`
-        .scroll-animate {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .animate-in {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        .fade-in {
-          animation: fadeIn 0.8s ease-out;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
         .card-hover {
           transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
         }
@@ -454,7 +415,7 @@ const Portfolio = () => {
 
         {/* Projects Section */}
         <section id="projects" className="container py-16">
-          <div className="scroll-animate">
+          <div>
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Featured Projects</h2>
               <p className="mt-4 text-lg text-muted-foreground">
@@ -464,7 +425,7 @@ const Portfolio = () => {
 
             <div className="grid gap-8">
               {projects.map((project, index) => (
-                <Card key={index} className="scroll-animate card-hover">
+                <Card key={index} className="card-hover">
                   <CardHeader>
   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
     <div className="space-y-4 flex-1">
@@ -599,7 +560,7 @@ const Portfolio = () => {
 
         {/* Skills Section with reactive MagicBento */}
         <section id="skills" className="container py-16">
-          <div className="scroll-animate">
+          <div>
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Technical Expertise</h2>
               <p className="mt-4 text-lg text-muted-foreground">
@@ -641,7 +602,7 @@ const Portfolio = () => {
             </div>
 
             {/* Certifications with Accordion */}
-            <Card className="scroll-animate card-hover mt-16">
+            <Card className="card-hover mt-16">
               <CardHeader>
                 <CardTitle>Certifications</CardTitle>
                 <CardDescription>
@@ -688,7 +649,7 @@ const Portfolio = () => {
 
         {/* About Section */}
         <section id="about" className="container py-16">
-          <div className="scroll-animate max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">About</h2>
               <p className="mt-4 text-lg text-muted-foreground">
