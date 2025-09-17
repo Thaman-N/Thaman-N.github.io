@@ -74,11 +74,11 @@ const Portfolio = () => {
       title: "ErzürNet",
       description: "Real-time violence detection system combining RandAugment and YOLOv8-based spatial cropping with an optimized X3D backbone enhanced by a Motion Enhancement module and Squeeze-and-Excitation blocks",
       highlights: [
-        "92.5% validation accuracy on RWF-2000 dataset",
+        "Sets new SOTA benchmark of 94.25% validation accuracy on RWF-2000 dataset",
         "SOTA performance of 99.5% validation accuracy on RLVS dataset",
         "SOTA performance of 100% validation accuracy on Hockey Fight dataset",
         "High generalizability with 80-90% cross-dataset accuracy",
-        "15-20ms inference time (30-50× faster than SOTA)"
+        "15-20ms inference time (30-50× faster than other SOTA methods)"
       ],
       tech: ["PyTorch", "TensorFlow", "OpenCV", "FastAPI", "React", "YOLOv8"],
       github: "https://github.com/Thaman-N/TDISS",
@@ -383,7 +383,7 @@ const Portfolio = () => {
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl mx-auto">
               Computer Science student passionate about AI and machine learning.
-              From achieving SOTA accuracy in computer vision tasks to building LLM-powered workflows, I love turning research concepts into working applications.
+              From achieving SOTA benchmarks in computer vision tasks to building LLM-powered workflows, I love turning research concepts into working applications.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 flex-wrap">
               <Button size="lg" asChild>
@@ -660,7 +660,7 @@ const Portfolio = () => {
             <div className="grid md:grid-cols-2 gap-12 items-start">
               <div className="space-y-6">
                 <DecryptedText 
-                  text="I'm a Computer Science student who's passionate about machine learning and its practical applications. Through coursework, certifications, and personal projects, I've been exploring everything from computer vision to natural language processing."
+                  text="I'm Thaman, a Computer Science student who's passionate about machine learning and its practical applications. Through coursework, certifications, and personal projects, I've been exploring everything from computer vision to natural language processing."
                   speed={100}
                   maxIterations={10}
                   animateOn="view"
