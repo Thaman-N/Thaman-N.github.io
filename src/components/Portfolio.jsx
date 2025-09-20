@@ -37,31 +37,35 @@ import DecryptedText from './DecryptedText';
 import MagicBento from './MagicBento';
 import Particles from './Particles';
 import useTheme from './useTheme';
-
-const FancyVideoSkeleton = () => (
-  <div className="aspect-video rounded-lg bg-muted overflow-hidden relative">
-    <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/10">
-      <div className="flex items-center justify-center h-full">
-        <div className="text-center space-y-3">
-          <div className="w-16 h-16 rounded-full bg-muted-foreground/20 mx-auto flex items-center justify-center animate-pulse">
-            <svg className="w-8 h-8 text-muted-foreground/40" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="h-3 w-24 mx-auto" />
-            <Skeleton className="h-2 w-16 mx-auto" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+import PixelCard from './PixelCard';
 
 const Portfolio = () => {
   const { darkMode, toggleDarkMode, currentTheme, setTheme, availableThemes, getThemeName, colors } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
+  const FancyVideoSkeleton = () => (
+    <PixelCard 
+      variant="theme"
+      themeColors={[colors.primary || '#3b82f6', colors.secondary || '#1e40af', colors.accent || '#6366f1']}
+      width="w-full"
+      height="aspect-video"
+      aspectRatio=""
+      className="rounded-lg"
+    >
+      <div style={{ position: 'absolute' }} className="text-center space-y-3">
+        <div className="w-16 h-16 rounded-full bg-muted-foreground/20 mx-auto flex items-center justify-center animate-pulse">
+          <svg className="w-8 h-8 text-muted-foreground/40" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+          </svg>
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-24 mx-auto" />
+          <Skeleton className="h-2 w-16 mx-auto" />
+        </div>
+      </div>
+    </PixelCard>
+  );
+
   const navigation = [
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
@@ -72,13 +76,13 @@ const Portfolio = () => {
   const projects = [
     {
       title: "ErzürNet",
-      description: "Real-time violence detection system combining RandAugment and YOLOv8-based spatial cropping with an optimized X3D backbone enhanced by a Motion Enhancement module and Squeeze-and-Excitation blocks",
+      description: "Real-time violence detection system combining RandAugment and YOLOv8-based spatial cropping with an optimized X3D backbone enhanced by a custom Motion Enhancement module",
       highlights: [
         "Sets new SOTA benchmark of 94.25% validation accuracy on RWF-2000 dataset",
-        "SOTA performance of 99.5% validation accuracy on RLVS dataset",
-        "SOTA performance of 100% validation accuracy on Hockey Fight dataset",
+        "Sets new SOTA benchmark of 99.75% validation accuracy on RLVS dataset",
+        "SOTA performance of 100% validation accuracy on ViolentFlows & Hockey Fight datasets",
         "High generalizability with 80-90% cross-dataset accuracy",
-        "15-20ms inference time (30-50× faster than other SOTA methods)"
+        "30-50× faster than other SOTA methods while being upto 80 times more efficient"
       ],
       tech: ["PyTorch", "TensorFlow", "OpenCV", "FastAPI", "React", "YOLOv8"],
       github: "https://github.com/Thaman-N/TDISS",
@@ -86,12 +90,12 @@ const Portfolio = () => {
       demo: "#"
     },
     {
-      title: "Legal Contract Summarization System",
+      title: "Legal Contract Analysis System",
       description: "Comprehensive LLM-based legal contract analysis system implementing various NLP techniques, prompt engineering approaches, RAG, multimodal inputs, and QLoRA fine-tuning",
       highlights: [
-        "Multi-modal document processing",
-        "QLoRA fine-tuning implementation",
-        "Advanced RAG architecture"
+        "Multi-modal document processing for text, images, documents and audio recordings",
+        "QLoRA fine-tuning implementation of smaller open-source models giving the model domain-specific knowledge",
+        "Advanced RAG architecture allowing for context-aware responses from large documents"
       ],
       tech: ["PyTorch", "Transformers", "PEFT", "Tesseract", "NLTK", "LangChain"],
       github: "https://github.com/Thaman-N/ACAS",
@@ -99,12 +103,27 @@ const Portfolio = () => {
       demo: "#"
     },
     {
+      title: "The Mirror",
+      description: "Intelligent WordPress plugin that deploys AI to engage toxic commenters in sophisticated banter until they abandon their hostile behavior, making trolls unwilling participants in boosting SEO metrics.",
+      highlights: [
+        "Eliminates toxic or hate comments while retaining traffic for SEO benefits",
+        "Sophisticated AI responses that outclass trolls with wit and condescension", 
+        "RAG-powered context awareness of post instructions and content",
+        "Configurable escalation system with progressive snark levels"
+      ],
+      tech: ["WordPress", "PHP", "Python", "HuggingFace Transformers", "JavaScript"],
+      github: "#",
+      media: "",
+      demo: "#"
+    },
+    {
       title: "Context Bridge for Web AI Platforms",
       description: "Context bridging system that automatically injects local repository-specific context into LLM conversations across AI provider websites, eliminating manual copy-paste workflows.",
       highlights: [
-        "Eliminates manual workflows",
+        "Eliminates manual copy-paste, tab switching workflows",
         "Cross-platform compatibility",
-        "Seamless context injection"
+        "Seamless content injection using advanced web automation & context repository mapping",
+        "Privacy-first design with local processing"
       ],
       tech: ["Python", "TypeScript", "Continue.dev"],
       github: "https://github.com/Thaman-N/continue",
@@ -270,6 +289,41 @@ const Portfolio = () => {
             padding-right: 0.75rem;
           }
         }
+        .shimmer-card {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .shimmer-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent
+          );
+          transition: left 0.6s ease;
+          pointer-events: none;
+          border-radius: inherit;
+        }
+
+        [data-theme="dark"] .shimmer-card::before {
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent
+          );
+        }
+
+        .shimmer-card:hover::before {
+          left: 100%;
+        }
       `}</style>
       
       {/* Particles Background for entire page with reactive colors */}
@@ -417,7 +471,7 @@ const Portfolio = () => {
         <section id="projects" className="container py-16">
           <div>
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Featured Projects</h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Ongoing Research & Projects</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 Building functional AI systems with real-world impact
               </p>
@@ -649,7 +703,7 @@ const Portfolio = () => {
 
         {/* About Section */}
         <section id="about" className="container py-16">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">About</h2>
               <p className="mt-4 text-lg text-muted-foreground">
@@ -657,62 +711,59 @@ const Portfolio = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-12 items-start">
-              <div className="space-y-6">
-                <DecryptedText 
-                  text="I'm Thaman, a Computer Science student who's passionate about machine learning and its practical applications. Through coursework, certifications, and personal projects, I've been exploring everything from computer vision to natural language processing."
-                  speed={100}
-                  maxIterations={10}
-                  animateOn="view"
-                  className="text-lg leading-relaxed text-muted-foreground"
-                />
-                <DecryptedText 
-                  text="My projects span real-time computer vision systems, finetune LLM workflows, and distributed computing platforms.I'm drawn to the challenge of taking cutting-edge research and making it work in practice - whether that's optimizing model performance, building user-friendly interfaces, or solving scalability challenges."
-                  speed={150}
-                  maxIterations={10}
-                  animateOn="view"
-                  className="text-lg leading-relaxed text-muted-foreground"
-                />
-                {/* <DecryptedText 
-                  text="I'm drawn to the challenge of taking cutting-edge research and making it work in practice - whether that's optimizing model performance, building user-friendly interfaces, or solving scalability challenges."
-                  speed={180}
-                  maxIterations={10}
-                  animateOn="view"
-                  className="text-lg leading-relaxed text-muted-foreground"
-                /> */}
-              </div>
-              
-              <div className="space-y-6">
-                <Card className="card-hover">
-                  <CardHeader>
-                    <CardTitle className="text-lg">Current Focus</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      Deepening my understanding of AI systems while building projects that solve real problems and preparing for my transition into the industry.
-                    </p>
-                  </CardContent>
-                </Card>
-                
-                <Card className="card-hover">
-                  <CardHeader>
-                    <CardTitle className="text-lg">Approach</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      I learn best by building. I combine academic knowledge with hands-on experimentation, focusing on creating systems that work and deliver measurable results.
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+            <Card className="card-hover shimmer-card">
+              <CardContent className="p-12">
+                <div className="grid md:grid-cols-2 gap-12 items-start">
+                  <div className="space-y-6">
+                    <DecryptedText 
+                      text="I'm Thaman, a Computer Science student who's passionate about machine learning and its practical applications. Through coursework, certifications, and personal projects, I've been exploring everything from computer vision to natural language processing."
+                      speed={100}
+                      maxIterations={10}
+                      animateOn="view"
+                      className="text-lg leading-relaxed text-muted-foreground"
+                    />
+                    <DecryptedText 
+                      text="My projects span real-time computer vision systems, finetune LLM workflows, and distributed computing platforms.I'm drawn to the challenge of taking cutting-edge research and making it work in practice - whether that's optimizing model performance, building user-friendly interfaces, or solving scalability challenges."
+                      speed={150}
+                      maxIterations={10}
+                      animateOn="view"
+                      className="text-lg leading-relaxed text-muted-foreground"
+                    />
+                  </div>
+                  
+                  <div className="space-y-6">
+                    <Card className="card-hover">
+                      <CardHeader>
+                        <CardTitle className="text-lg">Current Focus</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground">
+                          Deepening my understanding of AI systems while building projects that solve real problems and preparing for my transition into the industry.
+                        </p>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card className="card-hover">
+                      <CardHeader>
+                        <CardTitle className="text-lg">Approach</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground">
+                          I learn best by building. I combine academic knowledge with hands-on experimentation, focusing on creating systems that work and deliver measurable results.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
         {/* Footer */}
         <footer className="border-t">
           <div className="container py-8 text-center text-sm text-muted-foreground">
-            <p>Built with React</p>
+            <p>© {new Date().getFullYear()} • Thaman Nutakki • Built with React</p>
           </div>
         </footer>
       </div>

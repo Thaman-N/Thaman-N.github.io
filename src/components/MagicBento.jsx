@@ -8,40 +8,40 @@ const MOBILE_BREAKPOINT = 768;
 
 const cardData = [
   {
-    //color: '#060010',
     title: 'Computer Vision',
     description: 'Real-time threat computer vision systems',
-    label: 'CV/Detection'
+    label: 'CV/Detection',
+    image: 'eye.jpg'
   },
   {
-    //color: '#060010',
     title: 'Natural Language Processing',
     description: 'LLM-powered workflows',
-    label: 'NLP/LLMs'
+    label: 'NLP/LLMs',
+    image: 'nlp.png'
   },
   {
-    //color: '#060010',
     title: 'Deep Learning',
     description: 'SOTA performance with breakthrough efficiency',
-    label: 'Neural Networks'
+    label: 'Neural Networks',
+    image: 'nn.jpg'
   },
   {
-    //color: '#060010',
     title: 'Distributed Systems',
     description: 'Scalable ML infrastructure',
-    label: 'Architecture'
+    label: 'Architecture',
+    image: 'server.jpg'
   },
   {
-    //color: '#060010',
     title: 'Full-Stack Development',
     description: 'End-to-end AI application deployment',
-    label: 'Implementation'
+    label: 'Implementation',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=entropy&auto=format'
   },
   {
-    //color: '#060010',
     title: 'Research & Innovation',
     description: 'Bridging academia with practical solutions',
-    label: 'R&D'
+    label: 'R&D',
+    image: 'rd.jpg'
   }
 ];
 
@@ -88,7 +88,8 @@ const ParticleCard = ({
   glowColor = DEFAULT_GLOW_COLOR,
   enableTilt = true,
   clickEffect = false,
-  enableMagnetism = false
+  enableMagnetism = false,
+  cardImage = null
 }) => {
   const cardRef = useRef(null);
   const particlesRef = useRef([]);
@@ -308,10 +309,22 @@ const ParticleCard = ({
   return (
     <div
       ref={cardRef}
-      className={`${className} relative overflow-hidden`}
+      className={`${className} relative overflow-hidden group`}
       style={{ ...style, position: 'relative', overflow: 'hidden' }}
     >
-      {children}
+      {cardImage && (
+        <div className="card-image-overlay absolute inset-0 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-50 z-0">
+          <img 
+            src={cardImage} 
+            alt="" 
+            className="w-full h-full object-cover"
+            style={{ filter: 'brightness(0.7)' }}
+          />
+        </div>
+      )}
+      <div className="relative z-10">
+        {children}
+      </div>
     </div>
   );
 };
@@ -602,6 +615,18 @@ const MagicBento = ({
             overflow: hidden;
             text-overflow: ellipsis;
           }
+
+          .card-image-overlay {
+            z-index: 0;
+          }
+
+          .card-image-overlay img {
+            transition: transform 0.3s ease-in-out;
+          }
+
+          .group:hover .card-image-overlay img {
+            transform: scale(1.05);
+          }
           
           @media (max-width: 599px) {
             .card-responsive {
@@ -632,7 +657,7 @@ const MagicBento = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
-            const baseClassName = `card flex flex-col justify-between relative aspect-[4/3] min-h-[200px] w-full max-w-full p-5 rounded-[20px] border border-solid font-light overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${
+            const baseClassName = `card flex flex-col justify-between relative aspect-[4/3] min-h-[200px] w-full max-w-full p-5 rounded-[20px] border border-solid font-light overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] group ${
               enableBorderGlow ? 'card--border-glow' : ''
             }`;
 
@@ -657,11 +682,12 @@ const MagicBento = ({
                   enableTilt={enableTilt}
                   clickEffect={clickEffect}
                   enableMagnetism={enableMagnetism}
+                  cardImage={card.image}
                 >
-                  <div className="card__header flex justify-between gap-3 relative">
+                  <div className="card__header flex justify-between gap-3 relative z-10">
                     <span className="card__label text-base">{card.label}</span>
                   </div>
-                  <div className="card__content flex flex-col relative">
+                  <div className="card__content flex flex-col relative z-10">
                     <h3 className={`card__title font-normal text-base m-0 mb-1 ${textAutoHide ? 'text-clamp-1' : ''}`}>
                       {card.title}
                     </h3>
@@ -790,10 +816,20 @@ const MagicBento = ({
                   el.addEventListener('click', handleClick);
                 }}
               >
-                <div className="card__header flex justify-between gap-3 relative">
+                {/* Image overlay for hover effect */}
+                <div className="card-image-overlay absolute inset-0 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-50 z-0">
+                  <img 
+                    src={card.image} 
+                    alt="" 
+                    className="w-full h-full object-cover"
+                    style={{ filter: 'brightness(0.7)' }}
+                  />
+                </div>
+                
+                <div className="card__header flex justify-between gap-3 relative z-10">
                   <span className="card__label text-base">{card.label}</span>
                 </div>
-                <div className="card__content flex flex-col relative">
+                <div className="card__content flex flex-col relative z-10">
                   <h3 className={`card__title font-normal text-base m-0 mb-1 ${textAutoHide ? 'text-clamp-1' : ''}`}>
                     {card.title}
                   </h3>
