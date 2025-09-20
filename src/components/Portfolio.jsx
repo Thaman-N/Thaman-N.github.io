@@ -50,19 +50,28 @@ const Portfolio = () => {
       width="w-full"
       height="aspect-video"
       aspectRatio=""
-      className="rounded-lg"
+      className="rounded-lg cursor-pointer transition-all duration-300 hover:scale-[1.02] group"
     >
-      <div style={{ position: 'absolute' }} className="text-center space-y-3">
-        <div className="w-16 h-16 rounded-full bg-muted-foreground/20 mx-auto flex items-center justify-center animate-pulse">
-          <svg className="w-8 h-8 text-muted-foreground/40" fill="currentColor" viewBox="0 0 20 20">
+      <div style={{ position: 'absolute' }} className="text-center space-y-3 transition-all duration-300 group-hover:scale-105">
+        <div className="w-16 h-16 rounded-full bg-muted-foreground/20 mx-auto flex items-center justify-center animate-pulse group-hover:bg-muted-foreground/30 transition-colors duration-300">
+          <svg className="w-8 h-8 text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
           </svg>
         </div>
         <div className="space-y-2">
-          <Skeleton className="h-3 w-24 mx-auto" />
-          <Skeleton className="h-2 w-16 mx-auto" />
+          <Skeleton className="h-3 w-24 mx-auto group-hover:animate-pulse" />
+          <Skeleton className="h-2 w-16 mx-auto group-hover:animate-pulse" />
+        </div>
+        <div className="text-xs text-muted-foreground/60 group-hover:text-muted-foreground/80 transition-colors duration-300 opacity-0 group-hover:opacity-100 mt-2">
+          Demo Coming Soon
         </div>
       </div>
+      
+      {/* Subtle overlay hint */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+      
+      {/* Corner indicator */}
+      <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-muted-foreground/30 animate-pulse group-hover:bg-primary/50 transition-colors duration-300" />
     </PixelCard>
   );
 
@@ -272,6 +281,29 @@ const Portfolio = () => {
           .flex.gap-2.ml-auto > * {
             width: 100%;
             justify-content: center;
+          }
+          
+          /* Fix project card content containment */
+          .card-hover {
+            max-width: 100%;
+            overflow: hidden;
+          }
+          
+          .card-hover .flex.flex-wrap {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+          }
+          
+          /* Ensure tech badges don't overflow */
+          .flex.flex-wrap.gap-2 {
+            max-width: 100%;
+          }
+          
+          /* Constrain card content */
+          .space-y-4.flex-1 {
+            min-width: 0;
+            max-width: 100%;
           }
         }
 
