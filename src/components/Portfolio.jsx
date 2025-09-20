@@ -240,21 +240,157 @@ const Portfolio = () => {
           width: 100%;
         }
 
-        /* Mobile Responsive Styles - Only for proper scaling */
-        @media (max-width: 768px) {
+        /* Base responsive container */
+        .container {
+          max-width: 100%;
+          overflow-x: hidden;
+        }
+
+        /* Large Desktop - 1536px+ */
+        @media (min-width: 1536px) {
+          .container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+          }
+        }
+
+        /* Desktop - 1280px to 1535px */
+        @media (min-width: 1280px) and (max-width: 1535px) {
+          .container {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+          }
+        }
+
+        /* Small Desktop/Large Tablet Landscape - 1024px to 1279px */
+        @media (min-width: 1024px) and (max-width: 1279px) {
+          .container {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+          }
+          
+          /* Slightly reduce bento grid padding */
+          .bento-container-large .grid {
+            padding: 2rem;
+          }
+        }
+
+        /* CRITICAL: Tablet Portrait Mode - 768px to 1023px (iPad range) */
+        @media (min-width: 768px) and (max-width: 1023px) {
           .container {
             padding-left: 1rem;
             padding-right: 1rem;
           }
           
+          /* Force column layout for project cards */
+          .flex.flex-col.lg\\:flex-row.lg\\:items-start.lg\\:justify-between.gap-4 {
+            flex-direction: column !important;
+          }
+          
+          /* Remove fixed width and set full width */
+          .lg\\:w-80 {
+            width: 100% !important;
+            order: -1;
+            max-width: 100%;
+          }
+          
+          /* Fix button container layout */
+          .flex.flex-wrap.gap-2.items-center.justify-between {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+          }
+          
+          .flex.gap-2.ml-auto {
+            margin-left: 0 !important;
+            justify-content: center;
+            width: 100%;
+          }
+          
+          /* Hero button adjustments */
           .mt-10.flex.items-center.justify-center.gap-x-6.flex-wrap {
             flex-direction: column;
             gap: 0.75rem;
+            align-items: stretch;
           }
           
           .mt-10.flex.items-center.justify-center.gap-x-6.flex-wrap > * {
             width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+          }
+          
+          /* Content containment */
+          .card-hover {
+            max-width: 100%;
+            overflow: hidden;
+          }
+          
+          .space-y-4.flex-1 {
+            min-width: 0;
+            max-width: 100%;
+          }
+          
+          /* Typography adjustments for tablets */
+          .text-4xl.font-bold.tracking-tight.sm\\:text-6xl.md\\:text-7xl {
+            font-size: 2.5rem;
+            line-height: 1.2;
+          }
+          
+          .text-3xl.font-bold.tracking-tight.sm\\:text-4xl {
+            font-size: 2.25rem;
+          }
+          
+          /* Bento grid adjustments */
+          .bento-container-large .grid {
+            padding: 1.5rem;
+          }
+        }
+
+        /* Mobile Large - 640px to 767px */
+        @media (min-width: 640px) and (max-width: 767px) {
+          .container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
+          
+          .flex.flex-col.lg\\:flex-row.lg\\:items-start.lg\\:justify-between.gap-4 {
+            flex-direction: column;
+          }
+          
+          .lg\\:w-80 {
+            width: 100%;
+            order: -1;
+          }
+          
+          .flex.flex-wrap.gap-2.items-center.justify-between {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+          }
+          
+          .flex.gap-2.ml-auto {
+            margin-left: 0;
+            flex-direction: row;
             justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+          }
+          
+          .mt-10.flex.items-center.justify-center.gap-x-6.flex-wrap {
+            gap: 0.75rem;
+          }
+          
+          .text-4xl.font-bold.tracking-tight.sm\\:text-6xl.md\\:text-7xl {
+            font-size: 2.25rem;
+          }
+        }
+
+        /* Mobile Small - up to 639px */
+        @media (max-width: 639px) {
+          .container {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
           }
           
           .flex.flex-col.lg\\:flex-row.lg\\:items-start.lg\\:justify-between.gap-4 {
@@ -283,6 +419,33 @@ const Portfolio = () => {
             justify-content: center;
           }
           
+          .mt-10.flex.items-center.justify-center.gap-x-6.flex-wrap {
+            flex-direction: column;
+            gap: 0.75rem;
+          }
+          
+          .mt-10.flex.items-center.justify-center.gap-x-6.flex-wrap > * {
+            width: 100%;
+            justify-content: center;
+          }
+          
+          .text-4xl.font-bold.tracking-tight.sm\\:text-6xl.md\\:text-7xl {
+            font-size: 2rem;
+            line-height: 1.2;
+          }
+          
+          .text-3xl.font-bold.tracking-tight.sm\\:text-4xl {
+            font-size: 1.875rem;
+          }
+          
+          /* Bento grid mobile adjustments */
+          .bento-container-large .grid {
+            padding: 1rem;
+          }
+        }
+
+        /* Universal fixes for all screen sizes */
+        @media (max-width: 1023px) {
           /* Fix project card content containment */
           .card-hover {
             max-width: 100%;
@@ -307,20 +470,7 @@ const Portfolio = () => {
           }
         }
 
-        @media (max-width: 640px) {
-          .text-4xl.font-bold.tracking-tight.sm\\:text-6xl.md\\:text-7xl {
-            font-size: 2rem;
-          }
-          
-          .text-3xl.font-bold.tracking-tight.sm\\:text-4xl {
-            font-size: 2rem;
-          }
-          
-          .container {
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-          }
-        }
+        /* Shimmer effect */
         .shimmer-card {
           position: relative;
           overflow: hidden;
@@ -355,6 +505,16 @@ const Portfolio = () => {
 
         .shimmer-card:hover::before {
           left: 100%;
+        }
+
+        /* Performance optimizations */
+        * {
+          box-sizing: border-box;
+        }
+        
+        .card-hover,
+        .shimmer-card {
+          will-change: transform;
         }
       `}</style>
       
