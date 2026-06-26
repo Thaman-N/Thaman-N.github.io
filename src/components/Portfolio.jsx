@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 /* ─────────────────────────────────────────
-   DATA — fill in marked fields
+   DATA — replace with your real values
 ───────────────────────────────────────── */
 const DATA = {
   name: ["THAMAN", "NUTAKKI"],
@@ -30,7 +30,7 @@ const DATA = {
       role: "AI Engineer",
       org: "Late-stage Startup",
       location: "Bengaluru, India",
-      period: "2026 – Present",
+      period: "Jun 2026 – Present",
       bullets: [
         "Developing probabilistic entity resolution models using Fellegi-Sunter record linkage on large-scale financial datasets.",
         "Designing and deploying statistical anomaly detection methods for structured financial data in production audit systems.",
@@ -122,8 +122,7 @@ const DATA = {
 };
 
 /* ─────────────────────────────────────────
-   CARD GRAIN — draws cotton-stock texture onto a canvas.
-   Organic, non-uniform, no ridges or grid.
+   CARD GRAIN
 ───────────────────────────────────────── */
 function useCardGrain(canvasRef, wrapRef) {
   useEffect(() => {
@@ -140,12 +139,10 @@ function useCardGrain(canvasRef, wrapRef) {
       const img = ctx.createImageData(W, H);
       const d = img.data;
 
-      // fast deterministic pseudo-random
       function rng(x, y, s) {
         let n = Math.sin(x * 127.1 + y * 311.7 + s * 93.5) * 43758.5453;
         return n - Math.floor(n);
       }
-      // smooth noise — no axis preference, purely 2D
       function noise(x, y, sc, s) {
         const xi = Math.floor(x * sc), yi = Math.floor(y * sc);
         const xf = x * sc - xi, yf = y * sc - yi;
@@ -158,35 +155,25 @@ function useCardGrain(canvasRef, wrapRef) {
         return a + (b-a)*ux + (c-a)*uy + (b-a+a-b+e-c)*ux*uy;
       }
 
-     for (let y = 0; y < H; y++) {
-      for (let x = 0; x < W; x++) {
-        const i = (y * W + x) * 4;
-
-        // D — Wove Paper base: #f5f1e8
-        let r = 245, g = 241, b = 232;
-
-        // slow large-scale tonal drift — uneven light across the stock
-        // base stays the same: r=245, g=241, b=232
-        const tonal = noise(x/W, y/H, 1.5, 4) * 0.6
-                    + noise(x/W, y/H, 2.8, 11) * 0.4;
-        const tv = (tonal - 0.5) * 18;          // was 10
-        r += tv * 0.55; g += tv * 0.5; b += tv * 0.42;
-
-        const mid = noise(x/W * 16, y/H * 16, 1, 6)
-                  + noise(x/W * 10, y/H * 10, 1, 9) * 0.5;
-        const mv = (mid / 2 - 0.5) * 14;        // was 6
-        r += mv; g += mv * 0.92; b += mv * 0.8;
-
-        const micro = rng(x, y, 11) + rng(x+1, y, 12) * 0.4 + rng(x, y+1, 13) * 0.4;
-        const fv = (micro / 1.8 - 0.5) * 7;    // was 3
-        r += fv; g += fv; b += fv * 0.9;
-
-        d[i]   = Math.max(216, Math.min(255, Math.round(r)));  // floor lowered
-        d[i+1] = Math.max(212, Math.min(255, Math.round(g)));
-        d[i+2] = Math.max(204, Math.min(255, Math.round(b)));
-        d[i+3] = 255;
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          const i = (y * W + x) * 4;
+          let r = 245, g = 241, b = 232;
+          const tonal = noise(x/W, y/H, 1.5, 4) * 0.6 + noise(x/W, y/H, 2.8, 11) * 0.4;
+          const tv = (tonal - 0.5) * 18;
+          r += tv * 0.55; g += tv * 0.5; b += tv * 0.42;
+          const mid = noise(x/W * 16, y/H * 16, 1, 6) + noise(x/W * 10, y/H * 10, 1, 9) * 0.5;
+          const mv = (mid / 2 - 0.5) * 14;
+          r += mv; g += mv * 0.92; b += mv * 0.8;
+          const micro = rng(x, y, 11) + rng(x+1, y, 12) * 0.4 + rng(x, y+1, 13) * 0.4;
+          const fv = (micro / 1.8 - 0.5) * 7;
+          r += fv; g += fv; b += fv * 0.9;
+          d[i]   = Math.max(216, Math.min(255, Math.round(r)));
+          d[i+1] = Math.max(212, Math.min(255, Math.round(g)));
+          d[i+2] = Math.max(204, Math.min(255, Math.round(b)));
+          d[i+3] = 255;
+        }
       }
-    }
       ctx.putImageData(img, 0, 0);
     }
 
@@ -201,7 +188,97 @@ function useCardGrain(canvasRef, wrapRef) {
 }
 
 /* ─────────────────────────────────────────
-   CARD — reusable for hero + modal
+   SOL — exact port of classical engraving SVG
+   viewBox centred at 0,0 — all original coordinates preserved
+───────────────────────────────────────── */
+function SolIcon({ size = 22, inverted }) {
+  const style = {
+    display: "inline-block",
+    verticalAlign: "middle",
+    filter: inverted ? "invert(1)" : "none",
+    cursor: "pointer",
+    transition: "opacity 0.2s",
+    opacity: 0.55,
+    flexShrink: 0,
+  };
+  return (
+    <svg
+      width={size} height={size}
+      viewBox="-28 -28 56 56"
+      style={style}
+      aria-label={inverted ? "Switch to light mode" : "Switch to dark mode (invert)"}
+    >
+      {/* dashed outer halo ring */}
+      <circle cx="0" cy="0" r="22" fill="none" stroke="#c8a84b" strokeWidth="0.5" strokeDasharray="1.5,3"/>
+      {/* outer solid ring */}
+      <circle cx="0" cy="0" r="13" fill="none" stroke="#8b6914" strokeWidth="1"/>
+      {/* inner ring */}
+      <circle cx="0" cy="0" r="9" fill="none" stroke="#8b6914" strokeWidth="0.5"/>
+      {/* 4 cardinal primary rays */}
+      <line x1="0" y1="-16" x2="0" y2="-24" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="0" y1="16" x2="0" y2="24" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="-16" y1="0" x2="-24" y2="0" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="16" y1="0" x2="24" y2="0" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      {/* 4 diagonal primary rays */}
+      <line x1="11.3" y1="-11.3" x2="17" y2="-17" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="-11.3" y1="-11.3" x2="-17" y2="-17" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="11.3" y1="11.3" x2="17" y2="17" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      <line x1="-11.3" y1="11.3" x2="-17" y2="17" stroke="#8b6914" strokeWidth="1" strokeLinecap="round"/>
+      {/* 8 secondary fine rays */}
+      <line x1="7.7" y1="-15.3" x2="10" y2="-20" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      <line x1="-7.7" y1="-15.3" x2="-10" y2="-20" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      <line x1="15.3" y1="-7.7" x2="20" y2="-10" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      <line x1="15.3" y1="7.7" x2="20" y2="10" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      <line x1="7.7" y1="15.3" x2="10" y2="20" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      <line x1="-7.7" y1="15.3" x2="-10" y2="20" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      <line x1="-15.3" y1="-7.7" x2="-20" y2="-10" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      <line x1="-15.3" y1="7.7" x2="-20" y2="10" stroke="#8b6914" strokeWidth="0.5" strokeLinecap="round"/>
+      {/* centre dot */}
+      <circle cx="0" cy="0" r="2.5" fill="#8b6914"/>
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────
+   LUNA — exact port of classical engraving SVG
+   Crescent = full circle stroke + offset filled disc to carve the bite.
+   The fill colour of the carving disc must match the page/card bg so it
+   reads as a true crescent. In light mode: #f0ebe0 (matches the SVG preview).
+   When inverted the whole icon is counter-inverted so it stays sepia.
+───────────────────────────────────────── */
+function LunaIcon({ size = 22, inverted }) {
+  const style = {
+    display: "inline-block",
+    verticalAlign: "middle",
+    filter: inverted ? "invert(1)" : "none",
+    cursor: "pointer",
+    transition: "opacity 0.2s",
+    opacity: 0.55,
+    flexShrink: 0,
+  };
+  return (
+    <svg
+      width={size} height={size}
+      viewBox="-28 -28 56 56"
+      style={style}
+      aria-label="Switch to light mode"
+    >
+      {/* outer circle — stroked, forms the crescent arc */}
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#5c4e2e" strokeWidth="1"/>
+      {/* offset filled disc — carves the shadow side of the crescent */}
+      <circle cx="5" cy="-3" r="13" fill="#f0ebe0" stroke="none"/>
+      {/* star dots around crescent */}
+      <circle cx="12" cy="-16" r="1"   fill="#8b7540"/>
+      <circle cx="-10" cy="-18" r="0.8" fill="#8b7540"/>
+      <circle cx="18" cy="6"   r="0.7" fill="#8b7540"/>
+      <circle cx="-18" cy="8"  r="1.2" fill="#8b7540"/>
+      <circle cx="6" cy="20"  r="0.7" fill="#8b7540"/>
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────
+   CARD FACE
 ───────────────────────────────────────── */
 function CardFace({
   nameSize    = "clamp(14px, 4.5vw, 22px)",
@@ -233,24 +310,18 @@ function CardFace({
 
   return (
     <div ref={wrapRef} style={{ position: "absolute", inset: 0, borderRadius: "inherit" }}>
-      {/* grain canvas — sits at z0, fills card exactly */}
       <canvas ref={canvasRef} style={{
         position: "absolute", inset: 0, width: "100%", height: "100%",
         borderRadius: "inherit", display: "block", pointerEvents: "none", zIndex: 0,
       }} />
-
-      {/* shadow + inset highlight */}
       <div style={{
         position: "absolute", inset: 0, borderRadius: "inherit", zIndex: 1, pointerEvents: "none",
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(140,120,80,0.1), 0 8px 32px rgba(60,48,24,0.16), 0 2px 8px rgba(60,48,24,0.1)"
       }} />
-      {/* edge */}
       <div style={{
         position: "absolute", inset: 0, borderRadius: "inherit", zIndex: 1, pointerEvents: "none",
         border: "0.5px solid rgba(150,130,90,0.2)"
       }} />
-
-      {/* content — z2 */}
       <div style={{
         position: "absolute", inset: 0, zIndex: 2,
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -262,7 +333,6 @@ function CardFace({
           opacity: 0.5, marginBottom: "clamp(0.6rem, 2.5vw, 1.4rem)",
           textShadow: "0 0.8px 0 rgba(255,255,255,0.9), 0 -0.4px 0 rgba(40,28,6,0.28)"
         }}>Bengaluru, India · 2026</div>
-
         <div style={{
           fontFamily: "'Cinzel',serif", fontSize: nameSize, fontWeight: 500,
           letterSpacing: "0.18em", color: "#1a1208", textTransform: "uppercase",
@@ -270,9 +340,7 @@ function CardFace({
           textShadow: "0 1px 0 rgba(255,255,255,0.95), 0 2px 2px rgba(255,255,255,0.4), 0 -0.5px 0 rgba(14,8,0,0.6), 0 -1px 1.5px rgba(14,8,0,0.2)",
           filter: "drop-shadow(0 1px 0.5px rgba(245,240,228,0.8)) drop-shadow(0 -0.5px 0.5px rgba(14,8,0,0.3))"
         }}>{DATA.name[0]}<br />{DATA.name[1]}</div>
-
         <div style={{ width: dividerWidth, height: "0.5px", background: "rgba(90,76,44,0.28)", margin: "clamp(0.5rem, 2vw, 1.2rem) auto" }} />
-
         <div style={{
           fontFamily: "'Cinzel',serif", fontSize: titleSize, fontWeight: 400,
           letterSpacing: "0.28em", color: "#4a3e24", textTransform: "uppercase",
@@ -280,8 +348,6 @@ function CardFace({
           textShadow: "0 0.5px 0 rgba(255,255,255,0.8)"
         }}>{DATA.role}</div>
       </div>
-
-      {/* contact row — z3, absolutely at bottom */}
       <div style={{
         position: "absolute", zIndex: 3,
         bottom: bottomOffset, left: sidePad, right: sidePad,
@@ -314,6 +380,9 @@ const CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #ede8de; font-family: 'Cinzel', serif; color: #1e1508; -webkit-font-smoothing: antialiased; }
 
+  /* true CSS invert — mirrors iPhone Classic Invert / Windows Invert */
+  .pf-inverted { filter: invert(1); }
+
   .pf-top-edge {
     height: 2px;
     background: linear-gradient(90deg, transparent 0%, rgba(107,88,48,0.12) 15%, rgba(130,108,60,0.22) 50%, rgba(107,88,48,0.12) 85%, transparent 100%);
@@ -321,10 +390,13 @@ const CSS = `
 
   /* nav */
   .pf-nav { display: flex; justify-content: space-between; align-items: center; padding: 2.2rem 4rem; border-bottom: 0.5px solid rgba(140,120,75,0.18); }
+  .pf-nav-left { display: flex; align-items: center; gap: 1rem; }
   .pf-nav-mark { font-size: 9px; letter-spacing: 0.5em; color: #7a6840; opacity: 0.5; text-transform: uppercase; }
   .pf-nav-links { display: flex; gap: 3rem; }
   .pf-nav-link { font-size: 8px; letter-spacing: 0.35em; color: #5c4e2e; opacity: 0.55; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: opacity 0.25s; background: none; border: none; font-family: 'Cinzel', serif; }
   .pf-nav-link:hover { opacity: 0.9; }
+  .pf-toggle { background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; }
+  .pf-toggle:hover svg { opacity: 0.9 !important; }
 
   /* hero */
   .pf-hero { padding: 5rem 4rem; border-bottom: 0.5px solid rgba(140,120,75,0.14); display: flex; align-items: center; justify-content: center; }
@@ -354,8 +426,6 @@ const CSS = `
     transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
   }
   .pf-modal-backdrop.open .pf-modal-card { transform: scale(1); }
-
-  /* close hint inside modal card */
   .pf-modal-close {
     position: absolute; top: 1rem; right: 1.2rem; z-index: 10;
     font-family: 'Cinzel', serif; font-size: 7px; letter-spacing: 0.3em;
@@ -398,10 +468,9 @@ const CSS = `
   .pf-exp-bullet { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 300; line-height: 1.75; color: #3d3018; opacity: 0.75; padding-left: 1.2rem; position: relative; }
   .pf-exp-bullet::before { content: '·'; position: absolute; left: 0; color: #7a6840; opacity: 0.5; }
 
-  /* projects — hover spotlights the hovered row, dims siblings */
+  /* projects */
   .pf-projects-list:hover .pf-project-item { opacity: 0.35; transition: opacity 0.22s ease; }
   .pf-projects-list .pf-project-item:hover { opacity: 1 !important; }
-
   .pf-project-item { padding: 2rem 4rem; margin: 0 -4rem; border-bottom: 0.5px solid rgba(140,120,75,0.09); transition: opacity 0.22s ease; }
   .pf-project-item:last-child { border-bottom: none; }
   .pf-project-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
@@ -437,6 +506,7 @@ const CSS = `
   /* responsive */
   @media (max-width: 700px) {
     .pf-nav { padding: 1.2rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+    .pf-nav-left { gap: 0.8rem; }
     .pf-nav-links { gap: 0.9rem; flex-wrap: wrap; }
     .pf-nav-link  { letter-spacing: 0.2em; }
     .pf-hero { padding: 3rem 1.5rem; }
@@ -451,8 +521,7 @@ const CSS = `
     .pf-exp-header { flex-direction: column; gap: 0.15rem; }
     .pf-project-header { flex-direction: column; gap: 0.15rem; }
     .pf-footer { padding: 1.5rem; flex-direction: column; gap: 0.6rem; text-align: center; }
-    .pf-footer-links { justify-content: center; }
-    .pf-footer-links { flex-wrap: wrap; justify-content: center; }
+    .pf-footer-links { justify-content: center; flex-wrap: wrap; }
     .pf-modal-card { width: 92vw; aspect-ratio: unset; min-height: 55vw; }
   }
 `;
@@ -462,7 +531,8 @@ const CSS = `
 ───────────────────────────────────────── */
 export default function Portfolio() {
   const styleInjected = useRef(false);
-  const [cardOpen, setCardOpen] = useState(false);
+  const [cardOpen, setCardOpen]   = useState(false);
+  const [inverted, setInverted]   = useState(false);
 
   useLayoutEffect(() => {
     if (styleInjected.current) return;
@@ -479,8 +549,25 @@ export default function Portfolio() {
     return () => { document.body.style.overflow = ""; };
   }, [cardOpen]);
 
+  // sync body background so viewport edges outside root div also invert
+  // #ede8de inverted = rgb(255-237, 255-232, 255-222) = #121721
+  useEffect(() => {
+    document.body.style.background = inverted ? "#121721" : "#ede8de";
+    return () => { document.body.style.background = ""; };
+  }, [inverted]);
+
+
   useEffect(() => {
     const fn = (e) => { if (e.key === "Escape") setCardOpen(false); };
+    window.addEventListener("keydown", fn);
+    return () => window.removeEventListener("keydown", fn);
+  }, []);
+
+  // keyboard shortcut: I for invert (like iPhone triple-home or Windows Ctrl+Alt+I)
+  useEffect(() => {
+    const fn = (e) => {
+      if (e.key === "i" && e.altKey) setInverted(v => !v);
+    };
     window.addEventListener("keydown", fn);
     return () => window.removeEventListener("keydown", fn);
   }, []);
@@ -488,30 +575,24 @@ export default function Portfolio() {
   const scrollTo = (id) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
+  const toggleInvert = () => setInverted(v => !v);
+
   return (
-    <div>
-      <div className="pf-top-edge" />
-
-      {/* nav */}
-      <nav className="pf-nav">
-        <div className="pf-nav-mark">{DATA.initials} · 2026</div>
-        <div className="pf-nav-links">
-          {[["Experience","experience"],["Projects","projects"],["Education","education"],["Contact","contact"]].map(([l,id]) => (
-            <button key={id} className="pf-nav-link" onClick={() => scrollTo(id)}>{l}</button>
-          ))}
-        </div>
-      </nav>
-
-      {/* hero */}
-      <section className="pf-hero">
-        <div className="pf-card" onClick={() => setCardOpen(true)}>
-          <CardFace />
-        </div>
-      </section>
-
-      {/* modal — fullscreen closer view of card */}
+    <>
+      {/*
+        Modal lives OUTSIDE the inverted div.
+        position:fixed breaks when a parent has filter:invert().
+        Counter-invert it when the page is inverted so it still looks correct.
+      */}
       <div
         className={`pf-modal-backdrop${cardOpen ? " open" : ""}`}
+        style={inverted ? {
+          filter: "invert(1)",
+          // backdrop is rgba(22,15,5,0.78) in CSS; counter-inverted that becomes
+          // rgba(233,240,250,0.78) — blinding white. Pre-invert the bg so after
+          // the filter it lands back at the intended dark overlay.
+          background: "rgba(233,240,250,0.78)",
+        } : {}}
         onClick={() => setCardOpen(false)}
       >
         <div className="pf-modal-card" onClick={e => e.stopPropagation()}>
@@ -527,6 +608,39 @@ export default function Portfolio() {
           />
         </div>
       </div>
+
+    <div className={inverted ? "pf-inverted" : ""}>
+      <div className="pf-top-edge" />
+
+      {/* nav */}
+      <nav className="pf-nav">
+        <div className="pf-nav-left">
+          <div className="pf-nav-mark">{DATA.initials}</div>
+          {/* toggle: sol in light mode, luna when inverted */}
+          <button
+            className="pf-toggle"
+            onClick={toggleInvert}
+            title={inverted ? "Restore colours (Alt+I)" : "Invert colours (Alt+I)"}
+          >
+            {inverted
+              ? <LunaIcon size={18} inverted={inverted} />
+              : <SolIcon  size={18} inverted={inverted} />
+            }
+          </button>
+        </div>
+        <div className="pf-nav-links">
+          {[["Experience","experience"],["Projects","projects"],["Education","education"],["Contact","contact"]].map(([l,id]) => (
+            <button key={id} className="pf-nav-link" onClick={() => scrollTo(id)}>{l}</button>
+          ))}
+        </div>
+      </nav>
+
+      {/* hero */}
+      <section className="pf-hero">
+        <div className="pf-card" onClick={() => setCardOpen(true)}>
+          <CardFace />
+        </div>
+      </section>
 
       {/* about + stack */}
       <div className="pf-two-col">
@@ -619,5 +733,6 @@ export default function Portfolio() {
         <div className="pf-footer-wm">◆ {DATA.location} · MMXXVI</div>
       </footer>
     </div>
+    </>
   );
 }
