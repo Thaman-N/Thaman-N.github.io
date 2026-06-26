@@ -281,6 +281,7 @@ function LunaIcon({ size = 22, inverted }) {
    CARD FACE
 ───────────────────────────────────────── */
 function CardFace({
+  phase       = "rest",
   nameSize    = "clamp(14px, 4.5vw, 22px)",
   titleSize   = "clamp(7px, 1.8vw, 8.5px)",
   companySize = "clamp(7px, 1.9vw, 9px)",
@@ -289,9 +290,20 @@ function CardFace({
   bottomOffset = "clamp(0.8rem, 3.5vw, 2rem)",
   sidePad      = "clamp(1.2rem, 7vw, 3rem)",
 }) {
-  const canvasRef = useRef(null);
-  const wrapRef   = useRef(null);
+  const canvasRef  = useRef(null);
+  const wrapRef    = useRef(null);
+  const shadowRef  = useRef(null);
   useCardGrain(canvasRef, wrapRef);
+
+  const SHADOWS = {
+    rest:    "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(140,120,80,0.1), 0 8px 32px rgba(60,48,24,0.16), 0 2px 8px rgba(60,48,24,0.1)",
+    landing: "inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 4px rgba(60,48,24,0.06)",
+    pressed: "inset 0 4px 10px rgba(60,48,24,0.25), inset 0 8px 22px rgba(60,48,24,0.12), inset 0 1px 2px rgba(60,48,24,0.18)",
+  };
+
+  useEffect(() => {
+    if (shadowRef.current) shadowRef.current.style.boxShadow = SHADOWS[phase] || SHADOWS.rest;
+  }, [phase]);
 
   const linkStyle = {
     fontFamily: "'Cormorant Garamond', serif",
@@ -314,9 +326,10 @@ function CardFace({
         position: "absolute", inset: 0, width: "100%", height: "100%",
         borderRadius: "inherit", display: "block", pointerEvents: "none", zIndex: 0,
       }} />
-      <div style={{
+      <div ref={shadowRef} style={{
         position: "absolute", inset: 0, borderRadius: "inherit", zIndex: 1, pointerEvents: "none",
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(140,120,80,0.1), 0 8px 32px rgba(60,48,24,0.16), 0 2px 8px rgba(60,48,24,0.1)"
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(140,120,80,0.1), 0 8px 32px rgba(60,48,24,0.16), 0 2px 8px rgba(60,48,24,0.1)",
+        transition: "box-shadow 0.28s cubic-bezier(0.22,1,0.36,1)"
       }} />
       <div style={{
         position: "absolute", inset: 0, borderRadius: "inherit", zIndex: 1, pointerEvents: "none",
@@ -368,6 +381,8 @@ function CardFace({
           {DATA.githubDisplay}
         </a>
       </div>
+      {/* press overlay — z10, above all card content, carries the inset shadow */}
+      <div className="pf-card-press" />
     </div>
   );
 }
@@ -376,7 +391,6 @@ function CardFace({
    STYLES
 ───────────────────────────────────────── */
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #ede8de; font-family: 'Cinzel', serif; color: #1e1508; -webkit-font-smoothing: antialiased; }
 
@@ -401,9 +415,10 @@ const CSS = `
   /* hero */
   .pf-hero { padding: 5rem 4rem; border-bottom: 0.5px solid rgba(140,120,75,0.14); display: flex; align-items: center; justify-content: center; }
 
-  /* hero card */
-  .pf-card { width: 480px; height: 280px; background: #f5f1e8; border-radius: 6px; position: relative; cursor: pointer; transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); }
-  .pf-card:hover { transform: translateY(-6px); }
+  /* hero card — 3-phase: lifted at rest → flattens → presses in */
+  .pf-card { width: 480px; height: 280px; background: #f5f1e8; border-radius: 6px; position: relative; cursor: pointer; border: none; transition: transform 0.28s cubic-bezier(0.22,1,0.36,1); } .pf-card.pf-landing { transform: scale(0.993); } .pf-card.pf-pressed { transform: scale(0.976); }
+  .pf-card:active { transform: scale(0.958); }
+  .pf-card-press { position: absolute; inset: 0; border-radius: inherit; z-index: 10; pointer-events: none; }
 
   /* modal */
   .pf-modal-backdrop {
@@ -532,12 +547,29 @@ const CSS = `
 export default function Portfolio() {
   const styleInjected = useRef(false);
   const [cardOpen, setCardOpen]   = useState(false);
+  const [cardPhase, setCardPhase]  = useState('rest');
+  const cardPressTimer = useRef(null);
+
+  const handleCardEnter = () => {
+    setCardPhase('pressed');
+  };
+
+  const handleCardLeave = () => {
+    setCardPhase('rest');
+  };
   const [inverted, setInverted]   = useState(false);
 
   useLayoutEffect(() => {
     if (styleInjected.current) return;
     styleInjected.current = true;
     if (document.getElementById("pf-styles")) return;
+    if (!document.getElementById("pf-fonts")) {
+      const font = document.createElement("link");
+      font.id = "pf-fonts";
+      font.rel = "stylesheet";
+      font.href = "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap";
+      document.head.appendChild(font);
+    }
     const el = document.createElement("style");
     el.id = "pf-styles";
     el.textContent = CSS;
@@ -637,8 +669,8 @@ export default function Portfolio() {
 
       {/* hero */}
       <section className="pf-hero">
-        <div className="pf-card" onClick={() => setCardOpen(true)}>
-          <CardFace />
+        <div className={`pf-card${cardPhase === "landing" ? " pf-landing" : cardPhase === "pressed" ? " pf-pressed" : ""}`} onClick={() => setCardOpen(true)} onMouseEnter={handleCardEnter} onMouseLeave={handleCardLeave}>
+          <CardFace phase={cardPhase} />
         </div>
       </section>
 
